@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, request, render_template, redirect, url_for, abort, session
 
-from test import idpw_ck
-import adb
+import dbdb
 
 app = Flask(__name__)
 
@@ -16,40 +15,65 @@ def hello():
 def baseball():
     return render_template('baseball.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
+
+@app.route('/wash')
+def wash():
+    return render_template('wash.html')
+
+
+@app.route('/join', methods=['GET', 'POST'])
+def join():
     if request.method == "GET":
-        return render_template('signup.html')
+        return render_template('join.html')
     else:
         name = request.form['username']
         userid = request.form['userid']
         pwd = request.form['pwd']
         # 회원정보를 데이터베이스에 넣기
-        adb.insert_user(userid, name, pwd)
+        dbdb.insert_user(userid, name, pwd)
         return '<b>{}, {}, {}</b> 님 회원가입 되었습니다.'.format(name, userid, pwd)
 
-@app.route('/signin', methods=['GET', 'POST'])
-def signin():
-    if request.method == "GET":
-        return render_template('signin.html')
+# 로그인
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
     else:
-        userid = request.form['userid']
-        pwd = request.form['pwd']
-        # 로그인이 맞는 체크해서 데이터가 있으면 성공 없으면 실패
-        ret = adb.get_user(userid, pwd)
-        if ret != None:
-            print(ret[1])
-            session['name'] = ret[1]  # 세션에 정보 넣기
-            return redirect('/')
+        id = request.form['userid']
+        pw = request.form['pwd']
+        # id와 pw가 임의로 정한 값이랑 비교 해서 맞으면 맞다 틀리면 틀리다
+        if id == 'abc' and pw == '1234':
+            session['user'] = id
+            return '''
+                <script> alert("안녕하세요~ {}님");
+                location.href="/"
+                </script>
+            '''.format(id)
         else:
-            return redirect('/signin')
-        # return idpw_ck(userid, pwd)
-
+            return "아이디 또는 패스워드를 확인 하세요."
+            
+# 로그아웃(session 제거)
 @app.route('/logout')
 def logout():
-    session.pop('name', None)
-    return redirect('/')
+    session.pop('user', None)
+    return redirect(url_for('form'))
 
+
+# 로그인 사용자만 접근 가능으로 만들면
+@app.route('/form')
+def form():
+    if 'user' in session:
+        return render_template('test.html')
+    return redirect(url_for('login'))
+
+@app.route('/method', methods=['GET', 'POST'])
+def method():
+    if request.method == 'GET':
+        return 'GET 으로 전송이다.'
+    else:
+        num = request.form["num"]
+        name = request.form["name"]
+        return 'POST 이다. 학번은: {} 이름은: {}'.format(num, name)
 
 @app.route('/search')
 def search():
@@ -58,7 +82,9 @@ def search():
         return render_template('search.html')
     # 아니면 로그인 페이지로 이동
     else:
-        return redirect("/signin")
+        return redirect("main.html")
+
+
 
 @app.route('/action', methods=['GET', 'POST'])
 def action():
@@ -84,5 +110,5 @@ def football():
 # 배구페이지
 # 농구페이지
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+#    app.run(debug=True)

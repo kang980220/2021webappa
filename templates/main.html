@@ -8,32 +8,76 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+  .back{
+    background-image: url("static/back.png");
+    width: 100%;
+    height: 100%;
+    background-repeat: repeat;
+    background-size: 200px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+  }
+
+  .main{
+  position: absolute;
+   left: 15%;
+   bottom: 1%;
+  }
+</style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-light">
+<div class="back">
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <!-- Brand/logo -->
+  <a class="navbar-brand" href="#">강현인</a>
+  
+  <!-- Links -->
   <ul class="navbar-nav">
+    
     <li class="nav-item">
       <a class="nav-link" href="/">메인</a>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" href="/signup">회원가입</a>
+      <a class="nav-link" href="/baseball">코로나</a>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" href="/search">검색</a>
+      <a class="nav-link" href="/wash">손씻기</a>
     </li>
+
     <li class="nav-item">
-      <a class="nav-link" href="/football">축구</a>
+      <a class="nav-link" href="/login">로그인</a>
     </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('join') }}">회원가입</a>
+    </li>
+
+
+    
   </ul>
+
+
+
 </nav>
-<br>
 
 <div class="container-fluid">
-  <h3>누구누구 프로젝트 입니다</h3>
+  <br>
+
   
-  
+  <p></p>
 </div>
 
+<div class="main">
+  <img src="{{ url_for('static', filename='mainpot.jpg') }}">
+</div>
+
+
+</div>
 </body>
 </html>
