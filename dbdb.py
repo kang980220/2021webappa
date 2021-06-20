@@ -3,7 +3,7 @@ import pymysql
 def dbcon():
     return pymysql.connect(host='rkdgusdls.mysql.pythonanywhere-services.com',
                    user='rkdgusdls', password='h123456789',
-                   db='rkdgusdls$mydb', charset='utf8', port=3307)
+                   db='rkdgusdls$mydb', charset='utf8')
 def insert_user(userid, pw, name):
     try:
         db = dbcon()

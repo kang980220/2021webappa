@@ -26,11 +26,11 @@ def join():
     if request.method == "GET":
         return render_template('join.html')
     else:
-        name = request.form['name']
-        userid = request.form['userid']
+        id = request.form['id']
         pw = request.form['pw']
+        name = request.form['name']
         # 회원정보를 데이터베이스에 넣기
-        dbdb.insert_user(userid, name, pw)
+        
         #ret = dbdb.check_id(id)
         #if ret != None:
         #    return'''
@@ -39,7 +39,7 @@ def join():
         #            locatiob.href='/join';
         #            </script>
         #          '''
-
+        #dbdb.insert_user(id, pw, name)
         return redirect(url_for('login'))
 
 # 로그인
@@ -48,33 +48,32 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     else:
-        id = request.form['userid']
+        id = request.form['id']
         pw = request.form['pw']
+        print (id,type(id))
+        print (pw,type(pw))
         # id와 pw가 임의로 정한 값이랑 비교 해서 맞으면 맞다 틀리면 틀리다
-        if id == 'abc' and pw == '1234':
-            session['user'] = id
-            return '''
-                <script> alert("안녕하세요~ {}님");
-                location.href="/"
-                </script>
-            '''.format(id)
-        else:
-            return "아이디 또는 패스워드를 확인 하세요."
-            
+        # ret = dbdb.select_user(id, pw)
+        #if ret != None:
+        #    session['user'] = id
+        #    return redirect(url_for('hello'))           
+        #else:
+        #    return '''
+        #    <script>
+        #    alert
+        #    ('아이디 또는 패스워드를 확인 하세요');
+        #    location.href='/login';
+        #    </script>
+        #    '''
+        return redirect(url_for('hello'))    
+
 # 로그아웃(session 제거)
 @app.route('/logout')
 def logout():
     session.pop('user', None)
-    return redirect(url_for('form'))
+    return redirect(url_for('hello'))
 
-@app.route('/search')
-def search():
-    # 만약에 로그인 상태이면 검색 페이지 나오고
-    if 'name' in session:
-        return render_template('search.html')
-    # 아니면 로그인 페이지로 이동
-    else:
-        return redirect("main.html")
+
 
 # 축구페이지
 @app.route('/football')
@@ -92,5 +91,5 @@ def football():
 # 배구페이지
 # 농구페이지
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+   app.run(debug=True)
